@@ -58,46 +58,48 @@ optional arguments:
 | ENST00000457540.1 | 71 | GCACT | ae666552 | t | 102 | 82.36 | 1.484 | 0.00465 | GCACT | 78.63 | 2.61 | 1.21 | 34214 | 34228 | 82.1586,80.8952,79.7898,82.6324 |
 
 ## Example output (.h5 file structure)
+NB: [G] = Group, [A] = Attribute, [D] = Dataset
 ```
-read-c1654154
-    name: c1654154
-    contig: ENST00000448958.2
-    events:
-        event-1405:
-            position: 1405
-            ref_kmer: AGAAG
-            samples: [124.569,122.055,123.978,133.59,105.196]
-        event-1406:
-            position: 1406
-            ref_kmer: GAAGA
-            samples: [105.049,96.6192,119.097,93.07]
-        event-1407:
-            position: 1407
-            ref_kmer: AAGAA
-            samples: [126.64,122.351,123.534,134.773,125.9,129.301,129.006,123.978,117.914,110.816]
-        event-1408:
-            position: 1408
-            ref_kmer: AGAAA
-            samples: [103.422,102.682,128.414,136.991,142.611,142.167,129.006,133.442,131.076,133.59,118.654,132.555,123.83,129.154]
-read-ae666552:
-    name: ae666552
-    contig: ENST00000457540.1
-    events:
-        event-69:
-            position: 69
-            ref_kmer: TCGCA
-            samples: [95.582,91.634,89.581,90.8444,88.0018,91.1602,92.8974,88.7914,89.581,92.7394,83.8958,94.4766,86.5804]
-        event-70:
-            position: 70
-            ref_kmer: CGCAC
-            samples: [100.636,100.32,103.478,99.846,103.32,107.268,84.8433,89.7389,83.422,85.475,83.8958,80.2635,86.4225]
-        event-71:
-            position: 71
-            ref_kmer: GCACT
-            samples: [82.1586,80.8952,79.7898,82.6324]
+[G]read-c1654154
+    [A]name: c1654154
+    [A]contig: ENST00000448958.2
+    [G]events:
+        [G]event-1405:
+            [A]position: 1405
+            [A]ref_kmer: AGAAG
+            [D]samples: [124.569,122.055,123.978,133.59,105.196]
+        [G]event-1406:
+            [A]position: 1406
+            [A]ref_kmer: GAAGA
+            [D]samples: [105.049,96.6192,119.097,93.07]
+        [G]event-1407:
+            [A]position: 1407
+            [A]ref_kmer: AAGAA
+            [D]samples: [126.64,122.351,123.534,134.773,125.9,129.301,129.006,123.978,117.914,110.816]
+        [G]event-1408:
+            [A]position: 1408
+            [A]ref_kmer: AGAAA
+            [D]samples: [103.422,102.682,128.414,136.991,142.611,142.167,129.006,133.442,131.076,133.59,118.654,132.555,123.83,129.154]
+[G]read-ae666552:
+    [A]name: ae666552
+    [A]contig: ENST00000457540.1
+    [G]events:
+        [G]event-69:
+            [A]position: 69
+            [A]ref_kmer: TCGCA
+            [D]samples: [95.582,91.634,89.581,90.8444,88.0018,91.1602,92.8974,88.7914,89.581,92.7394,83.8958,94.4766,86.5804]
+        [G]event-70:
+            [A]position: 70
+            [A]ref_kmer: CGCAC
+            [D]samples: [100.636,100.32,103.478,99.846,103.32,107.268,84.8433,89.7389,83.422,85.475,83.8958,80.2635,86.4225]
+        [G]event-71:
+            [A]position: 71
+            [A]ref_kmer: GCACT
+            [D]samples: [82.1586,80.8952,79.7898,82.6324]
 ```
 
 ## How to run the demo
+From the top-level directory eventparser/ run:
 ```
 python3 scripts/parse_aligned_events.py demo/demo_eventalign.tsv eventalign -o demo/
 ```
