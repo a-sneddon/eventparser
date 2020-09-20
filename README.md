@@ -19,7 +19,6 @@ Aligned event files can be difficult to query directly (e.g. Nanopolish eventali
 
 ## Dependencies
 Requires Python >= 3.6
-Python
 
 ```
 git clone https://github.com/a-sneddon/eventparser
@@ -30,7 +29,7 @@ pip install -r scripts/requirements.txt
 
 # Usage
 ```
-parse_aligned_events.py [-h] [-o OUTPUT] input_file {eventalign,tombo}
+python3 parse_aligned_events.py [-h] [-o OUTPUT] input_file {eventalign,tombo}
 
 positional arguments:
   input_file            The aligned event file to be parsed
@@ -50,8 +49,10 @@ From the top-level directory ```eventparser/``` run:
 python3 scripts/parse_aligned_events.py demo/demo_eventalign.tsv eventalign -o demo/
 ```
 
-This will generate a file ```demo/demo_eventalign.h5``` and will print to std out the names of the reads that had insufficient information to be parsed (due to an error in the event alignment software that generated the eventalign.tsv file).
+## Output
+This will generate a file ```demo/demo_eventalign.h5``` and will print to std out the names of any reads that had insufficient information to be parsed (due to an error in the sequencing run or the event alignment software that generated the aligned event file).
 
+## Viewing the .h5 file
 The contents of the .h5 file can be viewed with HDFView (https://www.hdfgroup.org/downloads/hdfview/) or via the command line with hdf5-tools, e.g. using ```h5dump``` or ```h5ls``` (https://support.hdfgroup.org/HDF5/Tutor/cmdtoolview.html).
 
 ```python
@@ -117,6 +118,3 @@ NB: [G] = Group, [A] = Attribute, [D] = Dataset
             [A]ref_kmer: GCACT
             [D]samples: [82.1586,80.8952,79.7898,82.6324]
 ```
-
-# Release Notes
-* 1.0 Initial release
