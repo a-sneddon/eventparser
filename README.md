@@ -16,6 +16,11 @@ Due to errors in the basecalling process (converting raw signal to base sequence
 Aligned event files can be difficult to query directly (e.g. Nanopolish eventalign files are .tsv format with a varying number of lines per event) without some form of pre-processing for each query.  EventParser can be run once to convert the aligned event file into HDF5 format, which downstream analyses can easily query.  EventParser currently supports Nanopolish eventalign files but can easily be extended to support aligned event files from other software packages.  This would allow aligned events from any software to be converted to the same intermediate data structure, so that downstream event processing can be independent of the software used to align events.
 
 # Installation
+
+## Dependencies
+Requires Python >= 3.6
+Python
+
 ```
 git clone https://github.com/a-sneddon/eventparser
 cd eventparser
@@ -38,6 +43,21 @@ optional arguments:
 ```
 
 # Demo
+
+## How to run the demo
+From the top-level directory ```eventparser/``` run:
+```
+python3 scripts/parse_aligned_events.py demo/demo_eventalign.tsv eventalign -o demo/
+```
+
+This will generate a file ```demo/demo_eventalign.h5``` and will print to std out the names of the reads that had insufficient information to be parsed (due to an error in the event alignment software that generated the eventalign.tsv file).
+
+The contents of the .h5 file can be viewed with HDFView (https://www.hdfgroup.org/downloads/hdfview/) or via the command line with hdf5-tools, e.g. using ```h5dump``` or ```h5ls``` (https://support.hdfgroup.org/HDF5/Tutor/cmdtoolview.html).
+
+```python
+sudo apt install hdf5-tools # Or download HDF5 from here: https://portal.hdfgroup.org/display/support/Downloads
+h5dump demo/demo_eventalign.h5
+```
 
 ## Example input (excerpt of Nanopolish .tsv file)
 | contig | position | reference_kmer | read_name | strand | event_index | event_level_mean | event_stdv | event_length | model_kmer | model_mean | model_stdv | standardized_level | start_idx | end_idx | samples |
@@ -96,12 +116,6 @@ NB: [G] = Group, [A] = Attribute, [D] = Dataset
             [A]position: 71
             [A]ref_kmer: GCACT
             [D]samples: [82.1586,80.8952,79.7898,82.6324]
-```
-
-## How to run the demo
-From the top-level directory eventparser/ run:
-```
-python3 scripts/parse_aligned_events.py demo/demo_eventalign.tsv eventalign -o demo/
 ```
 
 # Release Notes
