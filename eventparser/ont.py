@@ -9,6 +9,7 @@ class Read:
 
     Args & Attributes:
         name (str): To identify the read.
+        contig (str): Reference contig to which this read maps.
         events ([Event]): Ordered list of events that occurred during
             the sequencing of this read.
     """
@@ -16,7 +17,6 @@ class Read:
         self.name = name
         self.contig = contig
         self.events = []
-        self.is_valid = True
 
     def add_event(self, event):
         """Adds an event to this Read in chronological order.

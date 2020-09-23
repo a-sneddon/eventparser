@@ -35,14 +35,10 @@ class AlignedEventParser:
         """
         h5_filename = filepath.split("/")[-1].split(".")[0] + ".h5"
         h5_filepath = output_dir + "/" + h5_filename
-        print(h5_filepath)
         with open(filepath) as in_file:
             with h5py.File(h5_filepath, "w") as out_file:
                 for read in self.read_parser.parse_reads(in_file):
-                    if read.is_valid:
-                        self.__write_read_to_h5(read, out_file)
-                    else:
-                        print("Read {0} is invalid and has been excluded from {1}".format(read.name, h5_filename))
+                    self.__write_read_to_h5(read, out_file)
 
     def __write_read_to_h5(self, read, h5file):
         """Writes a Read object to an HDF5 file.

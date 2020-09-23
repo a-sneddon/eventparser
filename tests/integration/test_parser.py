@@ -17,7 +17,7 @@ def test_parse_raises_exception_if_file_not_found():
     with pytest.raises(FileNotFoundError):
         parser.parse("{0}fake_file.tsv".format(IN), OUT)
 
-def test_parse_writes_valid_reads_to_h5_file():
+def test_parse_writes_reads_to_h5_file():
     parser = AlignedEventParser(EventalignReadParser())
     parser.parse("{0}multiple_reads.tsv".format(IN), OUT)
     expected_reads = {"read-c1654154-560c-42e4-a8c1-197e9ade83fb",
@@ -29,13 +29,3 @@ def test_parse_writes_valid_reads_to_h5_file():
             actual_reads.add(read)
     assert expected_reads == actual_reads
 
-def test_parse_does_not_write_invalid_reads_to_h5_file():
-    parser = AlignedEventParser(EventalignReadParser())
-    parser.parse("{0}skipped_position.tsv".format(IN), OUT)
-    expected_reads = {"read-c1654154-560c-42e4-a8c1-197e9ade83fb",
-        "read-fb90c5fa-859e-455a-87d4-cac02fa565e7"}
-    actual_reads = set()
-    with h5py.File("{0}skipped_position.h5".format(OUT), "r") as h5:
-        for read in h5.keys():
-            actual_reads.add(read)
-    assert expected_reads == actual_reads

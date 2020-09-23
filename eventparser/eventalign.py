@@ -35,11 +35,9 @@ class EventalignReadParser(IReadParser):
             if line.read_name == read.name:
                 if line.position == event.position:
                     event.add_samples(line.samples)
-                elif line.position == event.position + 1:
+                else:
                     read.add_event(event)
                     event = Event(line.position, line.ref_kmer, line.samples)
-                else:
-                    read.is_valid = False
             else:
                 read.add_event(event)
                 yield read
