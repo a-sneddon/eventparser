@@ -47,7 +47,7 @@ class AlignedEventParser:
             read (Read): Read to be written to file
             h5file (file object): HDF5 file to write to
         """
-        read_group = h5file.create_group("read-{0}".format(read.name))
+        read_group = h5file.create_group("read-{0}".format(read.name), track_order=True)
         read_group.attrs["name"] = read.name
         read_group.attrs["contig"] = read.contig
         for event in read.events:

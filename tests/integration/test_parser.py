@@ -27,5 +27,16 @@ def test_parse_writes_reads_to_h5_file():
     with h5py.File("{0}multiple_reads.h5".format(OUT), "r") as h5:
         for read in h5.keys():
             actual_reads.add(read)
-    assert expected_reads == actual_reads
+    assert actual_reads == expected_reads
 
+def test_parse_writes_reads_to_h5_file_with_event_order_preserved():
+    parser = AlignedEventParser(EventalignReadParser())
+    parser.parse("{0}position_ordering.tsv".format(IN), OUT)
+    expected_events = ["event-10", "event-11", "event-12", "event-101",
+                       "event-102", "event-103"]
+    actual_events = []
+    with h5py.File("{0}position_ordering.h5".format(OUT), "r") as h5:
+        read = h5["read-c1654154-560c-42e4-a8c1-197e9ade83fb"]
+        for event in read:
+            actual_events.append(event)
+    assert actual_events == expected_events
