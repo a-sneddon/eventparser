@@ -4,12 +4,12 @@ from eventparser.ont import Read, Event, Kmer
 def test_read_add_event_with_event():
     read = Read("read123", "ENST0")
     assert len(read.events) == 0
-    event = Event(1, "ACGT", [0.1, 0.2])
+    event = Event(1, "ACGT", [0.1, 0.2], 1, 3)
     read.add_event(event)
     assert len(read.events) == 1
 
 def test_event_add_samples_with_samples():
-    event = Event(1, "ACGT", [0.1, 0.2])
+    event = Event(1, "ACGT", [0.1, 0.2], 1, 3)
     event.add_samples([0.3, 0.4])
     assert event.samples == [0.1, 0.2, 0.3, 0.4]
 

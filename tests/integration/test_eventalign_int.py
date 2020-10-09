@@ -119,6 +119,15 @@ def test_parse_reads_with_single_read_file_returns_correct_events(
         expected_event = single_read_expected["events"][i]
         assert is_event_correct(event, expected_event) == True
 
+def test_parse_reads_with_single_read_file_returns_correct_indexes(
+    single_read_test_file, single_read_expected):
+    parser = EventalignReadParser()
+    reads = list(parser.parse_reads(single_read_test_file))
+    for i, event in enumerate(reads[0].events):
+        expected_event = single_read_expected["events"][i]
+        assert event.start_idx == expected_event["start_idx"]
+        assert event.end_idx == expected_event["end_idx"]
+
 """
 Test EventAlign file that contains events for multiple reads.
 

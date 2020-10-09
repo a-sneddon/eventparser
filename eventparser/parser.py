@@ -54,4 +54,6 @@ class AlignedEventParser:
             event_group = read_group.create_group("event-{0}".format(event.position))
             event_group.attrs["position"] = event.position
             event_group.attrs["ref_kmer"] = event.ref_kmer.sequence
+            event_group.attrs["start_idx"] = event.start_idx
+            event_group.attrs["end_idx"] = event.end_idx
             event_group.create_dataset("samples", data = event.samples)

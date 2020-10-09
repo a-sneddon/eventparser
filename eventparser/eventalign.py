@@ -27,7 +27,8 @@ class EventalignReadParser(IReadParser):
         next(reader) # header
         line = self.__parse_line(next(reader))
         read = Read(line.read_name, line.contig)
-        event = Event(line.position, line.ref_kmer, line.samples)
+        event = Event(line.position, line.ref_kmer, line.samples, 
+            line.start_idx, line.end_idx)
         for line in reader:
             line = self.__parse_line(line)
             if line.is_valid() == False:
@@ -37,12 +38,14 @@ class EventalignReadParser(IReadParser):
                     event.add_samples(line.samples)
                 else:
                     read.add_event(event)
-                    event = Event(line.position, line.ref_kmer, line.samples)
+                    event = Event(line.position, line.ref_kmer, 
+                        line.samples, line.start_idx, line.end_idx)
             else:
                 read.add_event(event)
                 yield read
                 read = Read(line.read_name, line.contig)
-                event = Event(line.position, line.ref_kmer, line.samples)
+                event = Event(line.position, line.ref_kmer, 
+                    line.samples, line.start_idx, line.end_idx)
         read.add_event(event)
         yield read
 
@@ -60,8 +63,11 @@ class EventalignReadParser(IReadParser):
         read_name = line[3]
         ref_kmer = line[2]
         model_kmer = line[9]
+        start_idx = int(line[13])
+        end_idx = int(line[14])
         samples = [float(x) for x in line[15].split(',')]
-        return Line(contig, position, read_name, ref_kmer, model_kmer, samples)
+        return Line(contig, position, read_name, ref_kmer, model_kmer, 
+            start_idx, end_idx, samples)
 
 class Line:
     """Represents one line in a Nanopolish eventalign file.
@@ -75,12 +81,15 @@ class Line:
         model_kmer (str): Model k-mer.
         samples ([float]): List of current measurements.
     """
-    def __init__(self, contig, position, read_name, ref_kmer, model_kmer, samples):
+    def __init__(self, contig, position, read_name, ref_kmer, 
+        model_kmer, start_idx, end_idx, samples):
         self.contig = contig
         self.position = position
         self.read_name = read_name
         self.ref_kmer = Kmer(ref_kmer)
         self.model_kmer = Kmer(model_kmer)
+        self.start_idx = start_idx
+        self.end_idx = end_idx
         self.samples = samples
 
     def is_valid(self):
@@ -93,7 +102,8 @@ class Line:
         """
         valid_position = self.position >= 0
         valid_kmers = self.__are_kmers_valid()
-        return valid_position and valid_kmers
+        valid_indexes = self.__are_indexes_valid()
+        return valid_position and valid_kmers and valid_indexes
 
     def __are_kmers_valid(self):
         valid_ref_kmer = self.ref_kmer.is_valid()
@@ -101,6 +111,11 @@ class Line:
         match = self.ref_kmer.matches(self.model_kmer)
         reverse_complement = self.ref_kmer.is_reverse_complement(self.model_kmer)
         return valid_ref_kmer and valid_model_kmer and (match or reverse_complement)
+
+    def __are_indexes_valid(self):
+        return self.end_idx > self.start_idx and \
+               self.end_idx >= 0 and \
+               self.start_idx >= 0
 
 class TomboReadParser(IReadParser):
     def parse_reads(self, stream):

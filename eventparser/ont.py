@@ -36,11 +36,15 @@ class Event:
         ref_kmer (str): Reference k-mer associated with the event.
         samples ([float]): List of current measurements associated with
             the event.
+        start_idx (int): Start index of this event in the raw signal.
+        end_idx (int): End index of this event in the raw signal.
     """
-    def __init__(self, position, ref_kmer, samples):
+    def __init__(self, position, ref_kmer, samples, start_idx, end_idx):
         self.position = position
         self.ref_kmer = ref_kmer
         self.samples = samples
+        self.start_idx = start_idx
+        self.end_idx = end_idx
 
     def add_samples(self, samples):
         """Adds samples to this Event in chronological order.
