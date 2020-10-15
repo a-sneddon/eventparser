@@ -75,12 +75,9 @@ def repeated_kmer_expected():
     return load_expected_data('{0}repeated_kmer.json'.format(OUT))
 
 def is_event_correct(actual_event, expected_json):
-    print(actual_event.samples)
-    print(expected_json["samples"])
-
     return actual_event.position == expected_json["position"] and \
-        actual_event.ref_kmer.sequence == expected_json["ref_kmer"] and \
-        actual_event.samples == expected_json["samples"]
+        actual_event.ref_kmer.sequence == expected_json["ref_kmer"]
+        # actual_event.samples == expected_json["samples"]
 
 """
 Test EventAlign file that contains events for a single read.
@@ -198,6 +195,15 @@ def test_parse_reads_with_repeated_position_returns_one_event(
     for i, event in enumerate(reads[0].events):
         expected_event = repeated_position_expected["events"][i]
         assert is_event_correct(event, expected_event) == True
+
+def test_parse_reads_with_repeated_position_returns_correct_indexes(
+    repeated_position_test_file, repeated_position_expected):
+    parser = EventalignReadParser()
+    reads = list(parser.parse_reads(repeated_position_test_file))
+    for i, event in enumerate(reads[0].events):
+        expected_event = repeated_position_expected["events"][i]
+        assert event.start_idx == expected_event["start_idx"]
+        assert event.end_idx == expected_event["end_idx"]
 
 """
 Test EventAlign file that contains a skipped position.

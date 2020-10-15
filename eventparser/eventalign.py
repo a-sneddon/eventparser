@@ -27,25 +27,28 @@ class EventalignReadParser(IReadParser):
         next(reader) # header
         line = self.__parse_line(next(reader))
         read = Read(line.read_name, line.contig)
-        event = Event(line.position, line.ref_kmer, line.samples, 
-            line.start_idx, line.end_idx)
+        event = Event(line.position, line.ref_kmer, line.start_idx, 
+            line.end_idx)
         for line in reader:
             line = self.__parse_line(line)
             if line.is_valid() == False:
                 continue
             if line.read_name == read.name:
                 if line.position == event.position:
-                    event.add_samples(line.samples)
+                    # event.add_samples(line.samples)
+                    # Assumes eventalign contains RNA, which has events 
+                    # in reverse order
+                    event.start_idx = line.start_idx 
                 else:
                     read.add_event(event)
                     event = Event(line.position, line.ref_kmer, 
-                        line.samples, line.start_idx, line.end_idx)
+                        line.start_idx, line.end_idx)
             else:
                 read.add_event(event)
                 yield read
                 read = Read(line.read_name, line.contig)
                 event = Event(line.position, line.ref_kmer, 
-                    line.samples, line.start_idx, line.end_idx)
+                    line.start_idx, line.end_idx)
         read.add_event(event)
         yield read
 
@@ -65,9 +68,9 @@ class EventalignReadParser(IReadParser):
         model_kmer = line[9]
         start_idx = int(line[13])
         end_idx = int(line[14])
-        samples = [float(x) for x in line[15].split(',')]
+        # samples = [float(x) for x in line[15].split(',')]
         return Line(contig, position, read_name, ref_kmer, model_kmer, 
-            start_idx, end_idx, samples)
+            start_idx, end_idx)
 
 class Line:
     """Represents one line in a Nanopolish eventalign file.
@@ -82,7 +85,7 @@ class Line:
         samples ([float]): List of current measurements.
     """
     def __init__(self, contig, position, read_name, ref_kmer, 
-        model_kmer, start_idx, end_idx, samples):
+        model_kmer, start_idx, end_idx):
         self.contig = contig
         self.position = position
         self.read_name = read_name
@@ -90,7 +93,7 @@ class Line:
         self.model_kmer = Kmer(model_kmer)
         self.start_idx = start_idx
         self.end_idx = end_idx
-        self.samples = samples
+        # self.samples = samples
 
     def is_valid(self):
         """Determines whether this line's data is valid.  There are
